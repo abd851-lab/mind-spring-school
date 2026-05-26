@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MIND SPRING SCHOOL SYSTEM DOKADA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #3f51b5;
+            --secondary: #f5f7fa;
+            --accent: #00c853;
+            --error: #d32f2f;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --sidebar-width: 260px;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border-left: 4px solid var(--text-light);
+        }
+
+        .menu-item svg {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: calc(100vw - var(--sidebar-width));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+
+        .active-pill {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .class-pill {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .class-pill:hover {
+            background-color: var(--secondary);
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-success { background-color: var(--accent); color: white; }
+        .btn-danger { background-color: var(--error); color: white; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--secondary);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Fee Cards */
+        .fee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .fee-card {
+            background: #fff;
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            border: 1px solid #eee;
+            position: relative;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .fee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .fee-card.paid { border-left: 8px solid var(--accent); }
+        .fee-card.unpaid { border-left: 8px solid var(--error); }
+
+        .fee-month { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary); }
+        .fee-status { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+        .fee-details { font-size: 0.9rem; margin-top: 0.5rem; color: #666; }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-container input {
+            flex-grow: 1;
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-card h3 { font-size: 2rem; }
+        .stat-card p { opacity: 0.8; font-size: 0.9rem; }
+
+        /* Class Stats Grid */
+        .class-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .class-stat-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .class-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+        }
+
+        .class-stat-card h4 {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .class-stat-card .count {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .btn, .search-container, .sidebar-menu, .header, .stats-grid, #admissionForm, #feeStudentList, .section:not(.active), #withdrawal, .no-print { display: none !important; }
+            .main-content { margin-left: 0; padding: 0; width: 100%; }
+            .section.active { display: block !important; opacity: 1 !important; }
+            .card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; }
+            table { width: 100%; border-collapse: collapse; margin-top: 1rem; border: 1px solid #ddd; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 10pt; }
+            th { background-color: #f8f9fa !important; -webkit-print-color-adjust: exact; }
+            body { background: white; }
+            .print-only { display: table-cell !important; }
+            
+            /* Bulk Printing */
+            .bulk-print-page { page-break-after: always; padding: 2rem; }
+            body.is-bulk-printing .section { display: none !important; }
+            body.is-bulk-printing #bulkPrintContainer { display: block !important; }
+        }
+
+        #bulkPrintContainer { display: none; }
+
+        .print-only { display: none; }
+
+        /* Login Screen Styles */
+        body.logged-out {
+            background-color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body.logged-out .sidebar,
+        body.logged-out .main-content {
+            display: none !important;
+        }
+
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, #1e1b4b 0%, #0f172a 90%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1.5rem;
+        }
+
+        /* Animated background elements */
+        .login-bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%);
+            top: -200px;
+            left: -200px;
+            animation: float 20s infinite alternate;
+            pointer-events: none;
+        }
+
+        .login-bg-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0) 70%);
+            bottom: -150px;
+            right: -150px;
+            animation: float 15s infinite alternate-reverse;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #4f46e5, #ec4899);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+        }
+
+        .login-logo svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .login-header h2 {
+            color: #ffffff;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .login-header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .login-form .form-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .login-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .login-input-wrapper svg {
+            position: absolute;
+            left: 1rem;
+            width: 20px;
+            height: 20px;
+            color: #64748b;
+            transition: color 0.3s;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .login-input::placeholder {
+            color: #475569;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .login-input:focus + svg {
+            color: #6366f1;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .login-remember {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .login-remember input {
+            cursor: pointer;
+            accent-color: #6366f1;
+            width: 16px;
+            height: 16px;
+        }
+
+        .login-error-msg {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            padding: 0.9rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active {
+            transform: translateY(1px);
+        }
+
+        /* Sidebar Logout button */
+        .sidebar-logout {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+        }
+
+        .btn-logout {
+            width: 100%;
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: white;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+<body class="logged-out">
+
+    <!-- Login Screen overlay -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-bg-glow"></div>
+        <div class="login-bg-glow-2"></div>
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>MIND SPRING</h2>
+                <p>ERP Portal Authentication</p>
+            </div>
+            
+            <div id="loginError" class="login-error-msg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink: 0;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span id="loginErrorText">Invalid username or password.</span>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <div class="login-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <input type="email" id="loginEmail" class="login-input" placeholder="name@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="login-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="loginPassword" class="login-input" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="login-options">
+                    <label class="login-remember">
+                        <input type="checkbox" id="loginRemember"> Remember me
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>MIND SPRING</h2>
+            <small>ERP SYSTEM</small>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" onclick="showSection('dashboard')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Dashboard
+            </div>
+            <div class="menu-item" onclick="showSection('admission')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                Admission
+            </div>
+            <div class="menu-item" onclick="showSection('fees')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                Fee Management
+            </div>
+            <div class="menu-item" onclick="showSection('backup')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Backup & Restore
+            </div>
+            <div class="menu-item" onclick="showSection('withdrawal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>
+                Withdrawal
+            </div>
+            <div class="menu-item" onclick="showSection('examination')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Examination
+            </div>
+        </div>
+        <div style="padding: 1.5rem; font-size: 0.75rem; opacity: 0.5;">
+            v1.0.0 (Offline)
+        </div>
+        <div class="sidebar-logout no-print">
+            <button class="btn-logout" onclick="handleLogout()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Log Out
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header no-print">
+            <h1>THE MIND SPRING SCHOOL SYSTEM DOKADA</h1>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalStudents">0</h3>
+                    <p>Total Students</p>
+                    <button class="btn no-print" style="background: rgba(255,255,255,0.2); margin-top: 0.8rem; font-size: 0.7rem;" onclick="printAllSchoolReceipts()">Print All Receipts</button>
+                </div>
+                <div class="stat-card" style="background: var(--accent);">
+                    <h3 id="totalIncome">0</h3>
+                    <p>Total Income</p>
+                </div>
+                <div class="stat-card" style="background: #fb8c00;">
+                    <h3 id="freeStudentsCount">0</h3>
+                    <p>Free Students</p>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Welcome to Admin Dashboard</h2>
+                <p style="margin-top: 1rem; color: #666;">Manage your school students and fee records efficiently from this offline portal.</p>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem;">Class-wise Student Overview</h2>
+                <div id="classBreakdown" class="class-stats-grid">
+                    <!-- Class cards injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admission Section -->
+        <div id="admission" class="section">
+            <div class="card">
+                <h2 id="admissionTitle">Student Admission</h2>
+                <form id="admissionForm" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; align-items: end;">
+                    <input type="hidden" id="editIndex" value="">
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="stdName" class="form-control" required placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name</label>
+                        <input type="text" id="stdFatherName" class="form-control" required placeholder="Father's Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="stdDOB" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Roll Number</label>
+                        <input type="text" id="stdRoll" class="form-control" required placeholder="Roll No">
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <input type="text" id="stdClass" class="form-control" required placeholder="e.g. Class 5">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="stdAddress" class="form-control" required placeholder="Full Address">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; height: 45px;">
+                        <input type="checkbox" id="stdIsFree" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label style="margin-bottom: 0; cursor: pointer;">Free Student Admission</label>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 1rem;">
+                        <button type="button" id="cancelEdit" class="btn btn-secondary" style="height: 45px; display: none;" onclick="cancelEditing()">Cancel Edit</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="height: 45px; width: 200px;">Add Student</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Student Records</h2>
+                    <button class="btn btn-primary" onclick="window.print()">Print List</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Father's Name</th>
+                            <th>DOB</th>
+                            <th>Class</th>
+                            <th>Address</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Fees Section -->
+        <div id="fees" class="section">
+            <div class="card no-print" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <h3 style="font-size: 1.1rem;">Class Filter</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-success" onclick="printSelectedReceipts()">Print Selected</button>
+                        <button id="printClassBtn" class="btn" style="background-color: #00bcd4; color: white; display: none;" onclick="printCurrentClassReceipts()">Print Class Receipts</button>
+                        <button class="btn btn-primary" onclick="printAllSchoolReceipts()">Print All School</button>
+                    </div>
+                </div>
+                <div id="feeClassPills" style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                    <button class="class-pill active-pill" onclick="filterByClassPill('all', this)">All</button>
+                    <!-- Class pills injected here -->
+                </div>
+            </div>
+
+            <div class="search-container no-print" style="margin-bottom: 1.5rem;">
+                <input type="text" id="feeSearch" class="form-control" placeholder="Search by Name or Roll Number..." oninput="filterFeeStudents()">
+                <button class="btn btn-danger" onclick="deleteWithdrawnStudents()">Clear Withdrawn</button>
+            </div>
+
+            <div id="feeStudentList" class="card" style="margin-bottom: 2rem;">
+                <h2>Select Student to Manage Fees</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="selectAllFees" onclick="toggleSelectAllFees()"></th>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Father's Name</th>
+                            <th>Class</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feeTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="feeCalendarView" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 id="currentFeeStudentName">Student Name</h2>
+                        <p id="currentFeeStudentInfo">Roll No: 001 | Class: 5</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="hideFeeCalendar()">Back to List</button>
+                </div>
+                
+                <div class="card" style="overflow-x: auto;">
+                    <table id="feeTable">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Tuition Fees</th>
+                                <th>Paid</th>
+                                <th>Unpaid</th>
+                                <th class="print-only">Accountant Signature</th>
+                                <th class="no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendarGrid">
+                            <!-- Rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backup Section -->
+        <div id="backup" class="section">
+            <div class="card" style="text-align: center; padding: 3rem;">
+                <h2 style="margin-bottom: 1rem;">Backup & Restore Data</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Protect your data by exporting backups frequently. You can manually upload the exported file to Google Drive.</p>
+                
+                <div style="display: flex; justify-content: center; gap: 2rem;">
+                    <button class="btn btn-success" onclick="exportData()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Export JSON Backup
+                    </button>
+                    
+                    <label class="btn btn-primary" style="margin-bottom: 0;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Restore from File
+                        <input type="file" id="importFile" hidden onchange="importData(event)">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Section -->
+        <div id="withdrawal" class="section">
+            <div class="card">
+                <h2>Student Withdrawal Management</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Search for a student to edit their details or record their withdrawal from the school.</p>
+                
+                <div class="search-container">
+                    <input type="text" id="withdrawSearchName" class="form-control" placeholder="Search by Student Name..." oninput="filterWithdrawal()">
+                    <input type="text" id="withdrawSearchFather" class="form-control" placeholder="Search by Father's Name..." oninput="filterWithdrawal()">
+                </div>
+            </div>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Father's Name</th>
+                            <th>Class</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawalTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Examination Section -->
+        <div id="examination" class="section">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <h2>Examination Management</h2>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="text" id="newSubjectName" class="form-control" placeholder="New Subject" style="width: 150px; margin-bottom: 0;">
+                        <button class="btn btn-success" onclick="addSubject()">+ Add Subject</button>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; width: 200px;">
+                        <select id="examClassSelect" class="form-control" onchange="renderExamTable()">
+                            <option value="">Select Class</option>
+                            <!-- Classes will be injected here -->
+                        </select>
+                    </div>
+                </div>
+                <div id="subjectListTags" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <!-- Subject tags injected here -->
+                </div>
+            </div>
+
+            <div class="card" id="examResultsCard" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Result Sheet - <span id="currentExamClass">Class</span></h3>
+                    <button class="btn btn-primary" onclick="window.print()">Print Results</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table style="font-size: 0.9rem;">
+                        <thead id="examTableHead">
+                            <!-- Headers injected here -->
+                        </thead>
+                        <tbody id="examTableBody">
+                            <!-- Data injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fee Modal -->
+    <div id="feeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFeeModal()">&times;</span>
+            <h2 id="modalTitle">January Fee</h2>
+            <form id="feeForm" style="margin-top: 1.5rem;">
+                <input type="hidden" id="modalMonth">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="feeAmount" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="feeDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Receipt Number</label>
+                    <input type="text" id="feeReceipt" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="feeStatus" class="form-control">
+                        <option value="paid">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Save Record</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="bulkPrintContainer"></div>
+
+    <script>
+        // Data State
+        let students = JSON.parse(localStorage.getItem('mindSpringData')) || [];
+        let examSubjects = JSON.parse(localStorage.getItem('mindSpringSubjects')) || ["English", "Urdu", "Math", "Science", "S.St", "Isl"];
+        let selectedStudentIndex = null;
+
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            if (sectionId === 'dashboard') updateDashboard();
+            if (sectionId === 'admission') renderStudentTable();
+            if (sectionId === 'fees') {
+                renderFeeClassPills();
+                renderFeeStudentTable();
+            }
+            if (sectionId === 'withdrawal') renderWithdrawalTable();
+            if (sectionId === 'examination') renderExamSection();
+        }
+
+        const allClasses = ["Nursery", "KG", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
+
+        // Student Admission
+        document.getElementById('admissionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('stdName').value;
+            const fatherName = document.getElementById('stdFatherName').value;
+            const dob = document.getElementById('stdDOB').value;
+            const roll = document.getElementById('stdRoll').value;
+            const className = document.getElementById('stdClass').value;
+            const address = document.getElementById('stdAddress').value;
+            const isFree = document.getElementById('stdIsFree').checked;
+            const editIndex = document.getElementById('editIndex').value;
+
+            if (editIndex === "") {
+                // Check duplicate roll
+                if (students.find(s => s.roll === roll)) {
+                    alert("Roll Number already exists!");
+                    return;
+                }
+
+                const newStudent = {
+                    name,
+                    fatherName,
+                    dob,
+                    roll,
+                    class: className,
+                    address,
+                    isFree,
+                    status: 'Active',
+                    fees: {}
+                };
+                students.push(newStudent);
+            } else {
+                // Update existing
+                const idx = parseInt(editIndex);
+                students[idx] = {
+                    ...students[idx],
+                    name,
+                    fatherName,
+                    dob,
+                    roll,
+                    class: className,
+                    address,
+                    isFree
+                };
+                cancelEditing();
+            }
+
+            saveData();
+            e.target.reset();
+            renderStudentTable();
+            updateDashboard();
+        });
+
+        function cancelEditing() {
+            document.getElementById('editIndex').value = "";
+            document.getElementById('admissionTitle').innerText = "Student Admission";
+            document.getElementById('submitBtn').innerText = "Add Student";
+            document.getElementById('cancelEdit').style.display = 'none';
+            document.getElementById('admissionForm').reset();
+        }
+
+        function editStudent(index) {
+            const s = students[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('admissionTitle').innerText = "Edit Student Record";
+            document.getElementById('submitBtn').innerText = "Update Record";
+            document.getElementById('cancelEdit').style.display = 'inline-flex';
+            
+            document.getElementById('stdName').value = s.name;
+            document.getElementById('stdFatherName').value = s.fatherName;
+            document.getElementById('stdDOB').value = s.dob;
+            document.getElementById('stdRoll').value = s.roll;
+            document.getElementById('stdClass').value = s.class;
+            document.getElementById('stdAddress').value = s.address;
+            document.getElementById('stdIsFree').checked = s.isFree || false;
+
+            showSection('admission');
+            // Hack to handle sidebar active state when redirected
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.querySelector('[onclick*="admission"]').classList.add('active');
+        }
+
+        function renderStudentTable() {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = students.map((s, index) => `
+                <tr class="${s.isFree ? 'no-print' : ''}">
+                    <td>${s.roll}</td>
+                    <td>${s.name} ${s.isFree ? '<span style="color: #fb8c00; font-size: 0.7rem; font-weight: 700; margin-left: 5px;">(FREE)</span>' : ''}</td>
+                    <td>${s.fatherName || '-'}</td>
+                    <td>${s.dob || '-'}</td>
+                    <td>${s.class}</td>
+                    <td>${s.address || '-'}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteStudent(${index})" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteStudent(index) {
+            if (confirm("Are you sure you want to delete this student record permanently?")) {
+                students.splice(index, 1);
+                saveData();
+                renderStudentTable();
+                renderFeeStudentTable();
+                if (document.getElementById('withdrawal').classList.contains('active')) renderWithdrawalTable();
+                updateDashboard();
+            }
+        }
+
+        // Fee Management
+        let currentFeeClassFilter = 'all';
+
+        function renderFeeClassPills() {
+            const container = document.getElementById('feeClassPills');
+            if (container) {
+                container.innerHTML = `<button class="class-pill ${currentFeeClassFilter === 'all' ? 'active-pill' : ''}" onclick="filterByClassPill('all', this)">All</button>` + 
+                    allClasses.map(c => `<button class="class-pill ${currentFeeClassFilter === c.toLowerCase() ? 'active-pill' : ''}" onclick="filterByClassPill('${c}', this)">${c}</button>`).join('');
+            }
+            
+            // Sync print button
+            const printClassBtn = document.getElementById('printClassBtn');
+            if (printClassBtn) {
+                if (currentFeeClassFilter === 'all') {
+                    printClassBtn.style.display = 'none';
+                } else {
+                    printClassBtn.style.display = 'inline-flex';
+                    // Find the original class name casing from allClasses
+                    const originalClass = allClasses.find(c => c.toLowerCase() === currentFeeClassFilter) || currentFeeClassFilter;
+                    printClassBtn.innerText = `Print ${originalClass} Receipts`;
+                }
+            }
+        }
+
+        function filterByClassPill(className, btn) {
+            currentFeeClassFilter = className.toLowerCase();
+            document.querySelectorAll('.class-pill').forEach(p => p.classList.remove('active-pill'));
+            btn.classList.add('active-pill');
+            
+            const printClassBtn = document.getElementById('printClassBtn');
+            if (className === 'all') {
+                printClassBtn.style.display = 'none';
+            } else {
+                printClassBtn.style.display = 'inline-flex';
+                printClassBtn.innerText = `Print ${className} Receipts`;
+            }
+            
+            renderFeeStudentTable();
+        }
+
+        function printCurrentClassReceipts() {
+            if (currentFeeClassFilter !== 'all') {
+                printClassReceipts(currentFeeClassFilter);
+            }
+        }
+
+        function renderFeeStudentTable(filtered = null) {
+            const tbody = document.getElementById('feeTableBody');
+            const classFilter = currentFeeClassFilter;
+            const searchQuery = document.getElementById('feeSearch').value.toLowerCase();
+
+            let data = filtered || students;
+            
+            // Apply filtering if no explicit filtered list is provided
+            if (!filtered) {
+                data = students.filter(s => {
+                    const matchesClass = classFilter === 'all' || (s.class && s.class.toLowerCase() === classFilter);
+                    const matchesSearch = !searchQuery || 
+                        (s.name.toLowerCase().includes(searchQuery) || s.roll.toLowerCase().includes(searchQuery));
+                    return matchesClass && matchesSearch;
+                });
+            }
+
+            tbody.innerHTML = data.map((s, index) => {
+                const realIndex = students.indexOf(s);
+                return `
+                <tr>
+                    <td><input type="checkbox" class="fee-checkbox" data-index="${realIndex}"></td>
+                    <td>${s.roll}</td>
+                    <td>${s.name} ${s.status === 'Withdrawn' ? '<span style="color: var(--error); font-size: 0.7rem; font-weight: 700;">(W)</span>' : ''}</td>
+                    <td>${s.fatherName || '-'}</td>
+                    <td>${s.class}</td>
+                    <td style="display: flex; gap: 5px;">
+                        <button class="btn btn-primary" onclick="showFeeCalendar(${realIndex})" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Select</button>
+                        ${s.status === 'Withdrawn' ? `<button class="btn btn-danger" onclick="deleteStudent(${realIndex})" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Delete</button>` : ''}
+                    </td>
+                </tr>
+            `}).join('');
+            
+            // Reset Select All checkbox
+            document.getElementById('selectAllFees').checked = false;
+        }
+
+        function toggleSelectAllFees() {
+            const isChecked = document.getElementById('selectAllFees').checked;
+            document.querySelectorAll('.fee-checkbox').forEach(cb => cb.checked = isChecked);
+        }
+
+        function printSelectedReceipts() {
+            const selectedIndexes = Array.from(document.querySelectorAll('.fee-checkbox:checked'))
+                .map(cb => parseInt(cb.getAttribute('data-index')));
+
+            if (selectedIndexes.length === 0) {
+                alert("Please select at least one student to print receipts.");
+                return;
+            }
+
+            const selectedStudents = selectedIndexes.map(idx => students[idx]);
+            const container = document.getElementById('bulkPrintContainer');
+            
+            container.innerHTML = selectedStudents.map(s => `
+                <div class="bulk-print-page">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary); text-transform: uppercase;">THE MIND SPRING SCHOOL SYSTEM DOKADA</h1>
+                        <h2>Student Fee Record</h2>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Name:</strong> ${s.name} | <strong>Roll No:</strong> ${s.roll}</p>
+                        <p><strong>Father's Name:</strong> ${s.fatherName || '-'} | <strong>Class:</strong> ${s.class}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Tuition Fees</th>
+                                <th>Paid</th>
+                                <th>Unpaid</th>
+                                <th>Accountant Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${months.map(m => {
+                                const fee = s.fees[m] || { status: 'unpaid', amount: '0' };
+                                const isPaid = fee.status === 'paid';
+                                return `
+                                    <tr>
+                                        <td><strong>${m}</strong></td>
+                                        <td>${fee.amount || '0'}</td>
+                                        <td>${isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td>${!isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td style="border-bottom: 1px solid #ccc; min-width: 150px;"></td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `).join('');
+
+            document.body.classList.add('is-bulk-printing');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('is-bulk-printing');
+                container.innerHTML = '';
+            }, 1000);
+        }
+
+        function filterFeeStudents() {
+            renderFeeStudentTable();
+        }
+
+        function showFeeCalendar(index) {
+            selectedStudentIndex = index;
+            const student = students[index];
+            document.getElementById('feeStudentList').style.display = 'none';
+            document.getElementById('feeCalendarView').style.display = 'block';
+            document.getElementById('currentFeeStudentName').innerText = student.name;
+            document.getElementById('currentFeeStudentInfo').innerText = `Father's Name: ${student.fatherName || '-'} | DOB: ${student.dob || '-'} | Roll No: ${student.roll} | Class: ${student.class} | Address: ${student.address || '-'}`;
+            renderCalendar();
+        }
+
+        function hideFeeCalendar() {
+            document.getElementById('feeStudentList').style.display = 'block';
+            document.getElementById('feeCalendarView').style.display = 'none';
+            selectedStudentIndex = null;
+        }
+
+        function renderCalendar() {
+            const student = students[selectedStudentIndex];
+            const tbody = document.getElementById('calendarGrid');
+            tbody.innerHTML = months.map(m => {
+                const fee = student.fees[m] || { status: 'unpaid', amount: '', date: '', receipt: '' };
+                const isPaid = fee.status === 'paid';
+                const amount = fee.amount || '0';
+                
+                return `
+                    <tr onclick="openFeeModal('${m}')" style="cursor: pointer;">
+                        <td><strong>${m}</strong></td>
+                        <td>${amount}</td>
+                        <td style="color: var(--accent); font-weight: bold;">${isPaid ? amount : '-'}</td>
+                        <td style="color: var(--error); font-weight: bold;">${!isPaid ? amount : '-'}</td>
+                        <td class="print-only" style="border-bottom: 1px solid #ccc; min-width: 150px;"></td>
+                        <td class="no-print">
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">Edit</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Modal Logic
+        function openFeeModal(month) {
+            const student = students[selectedStudentIndex];
+            const fee = student.fees[month] || { status: 'unpaid', amount: '', date: '', receipt: '' };
+            
+            document.getElementById('modalTitle').innerText = `${month} Fee Record`;
+            document.getElementById('modalMonth').value = month;
+            document.getElementById('feeAmount').value = fee.amount;
+            document.getElementById('feeDate').value = fee.date;
+            document.getElementById('feeReceipt').value = fee.receipt;
+            document.getElementById('feeStatus').value = fee.status;
+            
+            document.getElementById('feeModal').style.display = 'flex';
+        }
+
+        function closeFeeModal() {
+            document.getElementById('feeModal').style.display = 'none';
+        }
+
+        document.getElementById('feeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const month = document.getElementById('modalMonth').value;
+            const amount = document.getElementById('feeAmount').value;
+            const date = document.getElementById('feeDate').value;
+            const receipt = document.getElementById('feeReceipt').value;
+            const status = document.getElementById('feeStatus').value;
+
+            students[selectedStudentIndex].fees[month] = { amount, date, receipt, status };
+            saveData();
+            closeFeeModal();
+            renderCalendar();
+        });
+
+        // Backup & Restore
+        function exportData() {
+            const dataStr = JSON.stringify(students, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const date = new Date().toISOString().split('T')[0];
+            link.href = url;
+            link.download = `MindSpring_Backup_${date}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        students = importedData;
+                        saveData();
+                        alert("Data restored successfully!");
+                        location.reload();
+                    } else {
+                        alert("Invalid backup file format.");
+                    }
+                } catch (err) {
+                    alert("Error reading file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Withdrawal Logic
+        function renderWithdrawalTable(filtered = students) {
+            const tbody = document.getElementById('withdrawalTableBody');
+            tbody.innerHTML = filtered.map((s, index) => {
+                const realIndex = students.indexOf(s);
+                return `
+                <tr>
+                    <td>${s.roll}</td>
+                    <td>${s.name}</td>
+                    <td>${s.fatherName || '-'}</td>
+                    <td>${s.class}</td>
+                    <td>
+                        <span style="padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; background: ${s.status === 'Withdrawn' ? '#ffebee' : '#e8f5e9'}; color: ${s.status === 'Withdrawn' ? '#c62828' : '#2e7d32'};">
+                            ${s.status || 'Active'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editStudent(${realIndex})" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-right: 5px;">Edit</button>
+                        <button class="btn ${s.status === 'Withdrawn' ? 'btn-success' : 'btn-danger'}" onclick="toggleWithdraw(${realIndex})" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                            ${s.status === 'Withdrawn' ? 'Re-Admit' : 'Withdraw'}
+                        </button>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        function filterWithdrawal() {
+            const nameQuery = document.getElementById('withdrawSearchName').value.toLowerCase();
+            const fatherQuery = document.getElementById('withdrawSearchFather').value.toLowerCase();
+            
+            const filtered = students.filter(s => 
+                (s.name.toLowerCase().includes(nameQuery)) && 
+                (s.fatherName ? s.fatherName.toLowerCase().includes(fatherQuery) : true)
+            );
+            renderWithdrawalTable(filtered);
+        }
+
+        function toggleWithdraw(index) {
+            const s = students[index];
+            const action = s.status === 'Withdrawn' ? 're-admit' : 'withdraw';
+            if (confirm(`Are you sure you want to ${action} ${s.name}?`)) {
+                students[index].status = s.status === 'Withdrawn' ? 'Active' : 'Withdrawn';
+                saveData();
+                renderWithdrawalTable();
+                updateDashboard();
+                if (document.getElementById('admission').classList.contains('active')) renderStudentTable();
+                if (document.getElementById('fees').classList.contains('active')) renderFeeStudentTable();
+            }
+        }
+
+        function deleteWithdrawnStudents() {
+            const withdrawnCount = students.filter(s => s.status === 'Withdrawn').length;
+            if (withdrawnCount === 0) {
+                alert("No withdrawn students found to delete.");
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to PERMANENTLY delete all ${withdrawnCount} withdrawn students? This action cannot be undone.`)) {
+                students = students.filter(s => s.status !== 'Withdrawn');
+                saveData();
+                renderFeeStudentTable();
+                updateDashboard();
+                alert("Withdrawn student records cleared.");
+            }
+        }
+
+        // Helpers
+        function saveData() {
+            localStorage.setItem('mindSpringData', JSON.stringify(students));
+        }
+
+        function updateDashboard() {
+            document.getElementById('totalStudents').innerText = students.length;
+            document.getElementById('freeStudentsCount').innerText = students.filter(s => s.isFree).length;
+ 
+            // Calculate Total Income
+            let totalIncome = 0;
+            students.forEach(s => {
+                if (s.fees) {
+                    Object.values(s.fees).forEach(fee => {
+                        if (fee.status === 'paid' && fee.amount) {
+                            totalIncome += parseFloat(fee.amount) || 0;
+                        }
+                    });
+                }
+            });
+            document.getElementById('totalIncome').innerText = totalIncome.toLocaleString();
+
+            // Class Breakdown
+            const classBreakdown = document.getElementById('classBreakdown');
+            
+            classBreakdown.innerHTML = allClasses.map(cls => {
+                const count = students.filter(s => s.class && s.class.toLowerCase() === cls.toLowerCase()).length;
+                return `
+                    <div class="class-stat-card">
+                        <h4>${cls}</h4>
+                        <div class="count">${count}</div>
+                        <button class="btn btn-primary no-print" style="margin-top: 0.8rem; padding: 0.4rem 0.8rem; font-size: 0.75rem; width: 100%;" 
+                            onclick="manageClassFees('${cls}')">Manage Class Fees</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function manageClassFees(className) {
+            // 1. Set the class filter
+            currentFeeClassFilter = className.toLowerCase();
+            
+            // 2. Switch to Fees section
+            showSection('fees');
+        }
+
+        function printClassReceipts(className) {
+            const classStudents = students.filter(s => s.class && s.class.toLowerCase() === className.toLowerCase() && s.status !== 'Withdrawn');
+            if (classStudents.length === 0) {
+                alert("No active students found in this class.");
+                return;
+            }
+
+            const container = document.getElementById('bulkPrintContainer');
+            container.innerHTML = classStudents.map(s => `
+                <div class="bulk-print-page">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary); text-transform: uppercase;">THE MIND SPRING SCHOOL SYSTEM DOKADA</h1>
+                        <h2>Fee Receipt - ${className}</h2>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Name:</strong> ${s.name} | <strong>Roll No:</strong> ${s.roll}</p>
+                        <p><strong>Father's Name:</strong> ${s.fatherName || '-'} | <strong>Class:</strong> ${s.class}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Tuition Fees</th>
+                                <th>Paid</th>
+                                <th>Unpaid</th>
+                                <th>Accountant Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${months.map(m => {
+                                const fee = s.fees[m] || { status: 'unpaid', amount: '0' };
+                                const isPaid = fee.status === 'paid';
+                                return `
+                                    <tr>
+                                        <td><strong>${m}</strong></td>
+                                        <td>${fee.amount || '0'}</td>
+                                        <td>${isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td>${!isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td style="border-bottom: 1px solid #ccc; min-width: 150px;"></td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `).join('');
+
+            document.body.classList.add('is-bulk-printing');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('is-bulk-printing');
+                container.innerHTML = '';
+            }, 1000);
+        }
+
+        // Examination Logic
+        function renderExamSection() {
+            const select = document.getElementById('examClassSelect');
+            if (select) {
+                select.innerHTML = '<option value="">Select Class</option>' + 
+                    allClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+            renderSubjectTags();
+            document.getElementById('examResultsCard').style.display = 'none';
+        }
+
+        function renderSubjectTags() {
+            const container = document.getElementById('subjectListTags');
+            container.innerHTML = examSubjects.map((s, i) => `
+                <span style="background: #e3f2fd; color: #1565c0; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px;">
+                    ${s}
+                    <span onclick="removeSubject(${i})" style="cursor: pointer; font-weight: bold;">&times;</span>
+                </span>
+            `).join('');
+        }
+
+        function addSubject() {
+            const name = document.getElementById('newSubjectName').value.trim();
+            if (name && !examSubjects.includes(name)) {
+                examSubjects.push(name);
+                localStorage.setItem('mindSpringSubjects', JSON.stringify(examSubjects));
+                document.getElementById('newSubjectName').value = '';
+                renderSubjectTags();
+                if (document.getElementById('examResultsCard').style.display !== 'none') renderExamTable();
+            }
+        }
+
+        function removeSubject(index) {
+            if (confirm(`Remove subject "${examSubjects[index]}"? This will not delete marks already saved for students.`)) {
+                examSubjects.splice(index, 1);
+                localStorage.setItem('mindSpringSubjects', JSON.stringify(examSubjects));
+                renderSubjectTags();
+                if (document.getElementById('examResultsCard').style.display !== 'none') renderExamTable();
+            }
+        }
+
+        function renderExamTable() {
+            const className = document.getElementById('examClassSelect').value;
+            if (!className) {
+                document.getElementById('examResultsCard').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('examResultsCard').style.display = 'block';
+            document.getElementById('currentExamClass').innerText = className;
+
+            // Render Headers
+            const thead = document.getElementById('examTableHead');
+            thead.innerHTML = `
+                <tr>
+                    <th>Roll</th>
+                    <th>Name</th>
+                    ${examSubjects.map(s => `<th>${s}</th>`).join('')}
+                    <th>Total</th>
+                    <th>%</th>
+                    <th class="no-print">Save</th>
+                </tr>
+            `;
+
+            const filteredStudents = students.filter(s => s.class && s.class.toLowerCase() === className.toLowerCase() && s.status !== 'Withdrawn');
+            const tbody = document.getElementById('examTableBody');
+
+            tbody.innerHTML = filteredStudents.map(s => {
+                const realIndex = students.indexOf(s);
+                const exams = s.exams || {};
+                
+                let studentTotal = 0;
+                examSubjects.forEach(sub => {
+                    studentTotal += parseFloat(exams[sub]) || 0;
+                });
+                
+                const percentage = examSubjects.length > 0 ? ((studentTotal / (examSubjects.length * 100)) * 100).toFixed(1) : 0;
+
+                return `
+                    <tr>
+                        <td>${s.roll}</td>
+                        <td>${s.name}</td>
+                        ${examSubjects.map(sub => `
+                            <td><input type="number" class="form-control" style="width: 70px; padding: 0.3rem;" 
+                                value="${exams[sub] || 0}" 
+                                onchange="updateTempMark(${realIndex}, '${sub}', this.value)"></td>
+                        `).join('')}
+                        <td><strong>${studentTotal}</strong></td>
+                        <td><strong>${percentage}%</strong></td>
+                        <td class="no-print">
+                            <button class="btn btn-success" onclick="saveExamMarks(${realIndex})" style="padding: 0.3rem 0.6rem; font-size: 0.7rem;">Save</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateTempMark(index, subject, value) {
+            if (!students[index].exams) students[index].exams = {};
+            students[index].exams[subject] = value;
+        }
+
+        function saveExamMarks(index) {
+            saveData();
+            renderExamTable();
+            alert("Marks saved successfully!");
+        }
+
+        function printAllSchoolReceipts() {
+            if (students.length === 0) {
+                alert("No students found in the system.");
+                return;
+            }
+
+            const activeStudents = students.filter(s => s.status !== 'Withdrawn');
+            if (activeStudents.length === 0) {
+                alert("No active students found.");
+                return;
+            }
+
+            // Sort students by class to keep them organized
+            const sortedStudents = activeStudents.sort((a, b) => {
+                const classA = a.class ? a.class.toLowerCase() : '';
+                const classB = b.class ? b.class.toLowerCase() : '';
+                return classA.localeCompare(classB);
+            });
+
+            const container = document.getElementById('bulkPrintContainer');
+            container.innerHTML = sortedStudents.map(s => `
+                <div class="bulk-print-page">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary); text-transform: uppercase;">THE MIND SPRING SCHOOL SYSTEM DOKADA</h1>
+                        <h2>Student Fee Record - ${s.class}</h2>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Name:</strong> ${s.name} | <strong>Roll No:</strong> ${s.roll}</p>
+                        <p><strong>Father's Name:</strong> ${s.fatherName || '-'} | <strong>Class:</strong> ${s.class}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Tuition Fees</th>
+                                <th>Paid</th>
+                                <th>Unpaid</th>
+                                <th>Accountant Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${months.map(m => {
+                                const fee = s.fees[m] || { status: 'unpaid', amount: '0' };
+                                const isPaid = fee.status === 'paid';
+                                return `
+                                    <tr>
+                                        <td><strong>${m}</strong></td>
+                                        <td>${fee.amount || '0'}</td>
+                                        <td>${isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td>${!isPaid ? (fee.amount || '0') : '-'}</td>
+                                        <td style="border-bottom: 1px solid #ccc; min-width: 150px;"></td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `).join('');
+
+            document.body.classList.add('is-bulk-printing');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('is-bulk-printing');
+                container.innerHTML = '';
+            }, 1000);
+        }
+
+        // Authentication Configuration
+        const AUTH_USER = "abbdullah.au698@gmail";
+        const AUTH_PASS = "7652632++";
+
+        function checkAuth() {
+            const isAuth = sessionStorage.getItem('isMindSpringAuthenticated') === 'true' || 
+                           localStorage.getItem('isMindSpringAuthenticated') === 'true';
+            
+            if (isAuth) {
+                document.body.classList.remove('logged-out');
+                document.getElementById('loginScreen').style.display = 'none';
+            } else {
+                document.body.classList.add('logged-out');
+                document.getElementById('loginScreen').style.display = 'flex';
+            }
+        }
+
+        // Login form submission handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('loginRemember').checked;
+            const errorDiv = document.getElementById('loginError');
+
+            if (email === AUTH_USER && pass === AUTH_PASS) {
+                errorDiv.style.display = 'none';
+                if (remember) {
+                    localStorage.setItem('isMindSpringAuthenticated', 'true');
+                } else {
+                    sessionStorage.setItem('isMindSpringAuthenticated', 'true');
+                }
+                
+                // Animate entry to main app
+                const container = document.querySelector('.login-container');
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    checkAuth();
+                    updateDashboard();
+                }, 300);
+            } else {
+                errorDiv.style.display = 'flex';
+                // Trigger shake animation again
+                errorDiv.style.animation = 'none';
+                errorDiv.offsetHeight; /* trigger reflow */
+                errorDiv.style.animation = null;
+            }
+        });
+
+        // Logout handler
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out of the portal?")) {
+                localStorage.removeItem('isMindSpringAuthenticated');
+                sessionStorage.removeItem('isMindSpringAuthenticated');
+                document.getElementById('loginForm').reset();
+                document.getElementById('loginError').style.display = 'none';
+                
+                const container = document.querySelector('.login-container');
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+                
+                checkAuth();
+            }
+        }
+
+        // Initialize
+        checkAuth();
+        updateDashboard();
+    </script>
+</body>
+</html>
